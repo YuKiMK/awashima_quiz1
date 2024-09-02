@@ -237,16 +237,16 @@ input[type="radio"] {
         font-size: 1.2em;
     }
 
-    .question div {
+    /* .question div {
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: 10px;
-    }
+    } */
 
-    .question label {
+    /* .question label {
         width: 100%;
-        margin-left: 0;  /* モバイルでは左余白をなくしてテキストを全幅に */
-    }
+        margin-left: 0; 
+    } */
 
     button {
         width: 100%; /* ボタンを全幅に */
@@ -264,6 +264,22 @@ input[type="radio"] {
     .feedback-container textarea {
         width: 100%; /* テキストエリアも全幅に */
     }
+    .question div {
+        flex-direction: row; /* Ensure flex direction is row for alignment */
+        align-items: center; /* Align items in the center */
+    }
+
+    input[type="radio"] {
+        margin-right: 8px;
+        flex-shrink: 0;
+        margin-top: 0; /* Ensure radio button stays aligned with the label text */
+    }
+
+    .question label {
+        width: auto; /* Ensure label takes up available space */
+        margin-left: 8px;
+    }
+
 }
 
 /* タブレット用のスタイル */
@@ -372,11 +388,13 @@ button:hover {
 button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
+    transform: none; /* Prevent floating effect */
 }
 
 /* 無効状態のボタンに対するホバーのスタイルを無効化 */
 button:disabled:hover {
     background-color: #cccccc; /* ホバーしても色を変えない */
+    transform: none; /* No translate effect on hover */
 }
 
 /* 新規追加 */
