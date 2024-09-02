@@ -59,6 +59,11 @@ const app = Vue.createApp({
             if (this.currentAnswer === this.currentQuestion.correct) {
                 this.score++;
             }
+            // 回答ボタンを無効にする
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                submitButton.disabled = true; // ボタンを無効化
+            }            
         },
         reappearNote() {
             setTimeout(() => {
@@ -72,7 +77,7 @@ const app = Vue.createApp({
                 note.textContent = notes[Math.floor(Math.random() * notes.length)];
                 document.body.appendChild(note);
                 setTimeout(() => {
-                    note.style.opacity = 0.4;
+                    note.style.opacity = 0.2;
                 }, 100);
                 note.addEventListener('click', () => {
                     note.classList.add('fade-out');
@@ -120,7 +125,7 @@ const app = Vue.createApp({
         this.shuffleQuestions();
         this.shuffleOptions();
         const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-        const numNotes = 10;
+        const numNotes = 7;
         for (let i = 0; i < numNotes; i++) {
             const note = document.createElement('div');
             note.className = 'music-note';
