@@ -59,11 +59,13 @@ const app = Vue.createApp({
             if (this.currentAnswer === this.currentQuestion.correct) {
                 this.score++;
             }
-            // 回答ボタンを無効にする
+            // 回答ボタンを無効にして色を固定
             const submitButton = document.querySelector('.btn-primary');
             if (submitButton) {
                 submitButton.disabled = true; // ボタンを無効化
-            }            
+                submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
+                submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
+            }
         },
         reappearNote() {
             setTimeout(() => {
