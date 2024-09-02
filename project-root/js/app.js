@@ -65,6 +65,34 @@ const app = Vue.createApp({
                 submitButton.disabled = true; // ボタンを無効化
                 submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
                 submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
+                submitButton.classList.remove('active'); // アクティブ状態を解除
+            }
+        },
+        checkAnswerSelected() {
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                if (this.currentAnswer) {
+                    submitButton.disabled = false; // ボタンを有効化
+                    submitButton.style.backgroundColor = '#4CAF50'; // 背景色を緑に戻す
+                    submitButton.style.cursor = 'pointer'; // カーソルを「押せる」状態に
+                } else {
+                    submitButton.disabled = true; // ボタンを無効化
+                    submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
+                    submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
+                }
+            }
+        },
+        nextQuestion() {
+            this.currentQuestionIndex++;
+            this.currentAnswer = '';
+            this.answered = false;
+
+            // 回答ボタンの状態をリセット
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                submitButton.disabled = true; // 次の問題では再び無効からスタート
+                submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
+                submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
             }
         },
         reappearNote() {
@@ -97,11 +125,6 @@ const app = Vue.createApp({
             } else {
                 alert(this.texts.roomNumberPlaceholder);
             }
-        },
-        nextQuestion() {
-            this.currentQuestionIndex++;
-            this.currentAnswer = '';
-            this.answered = false;
         },
         showResults() {
             this.quizCompleted = true;
@@ -154,6 +177,11 @@ const app = Vue.createApp({
         },
         progressPercentage() {
             return ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+        }
+    },
+    watch: {
+        currentAnswer() {
+            this.checkAnswerSelected();
         }
     }
 });
