@@ -103,24 +103,25 @@ h2 {
     padding: 20px;
 }
 
+/* 選択肢の文字と丸ぽちを正しく配置 */
 .question div {
     display: flex;
     align-items: center;
-    width: 100%;         /* ラベル全体の幅をボックスいっぱいに */
-    max-width: 500px;    /* 最大幅を設定 */
+    width: 100%;
+    max-width: 500px;
     margin: 10px 0;
     justify-content: flex-start; /* 左寄せで揃える */
 }
 
 .question label {
-    width: calc(100% - 30px); /* ラジオボタン部分を除いた幅を設定 */
-    margin-left: 8px;         /* ラジオボタンとテキストの間に余白を追加 */
-    text-align: left;         /* テキストを左揃えにする */
+    margin-left: 8px;
+    text-align: left;
+    word-break: break-word; /* 長いテキストを折り返し */
 }
 
-/* ラジオボタン */
 input[type="radio"] {
-    margin-right: 8px;     /* ラジオボタンとラベルの間にスペースを追加 */
+    margin-right: 8px;
+    flex-shrink: 0; /* ラジオボタンが小さくならないようにする */
 }
 
 .explanation {
@@ -208,7 +209,7 @@ input[type="radio"] {
 .music-note {
     position: fixed;
     font-size: 30px;
-    opacity: 0.4;
+    opacity: 0.2;
     animation: float 5s infinite ease-in-out;
     pointer-events: auto;
     transition: opacity 1s ease-in-out;
