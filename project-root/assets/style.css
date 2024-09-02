@@ -1,0 +1,445 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, Osaka, 'MS PGothic', arial, helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 0;
+}
+
+#app {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    max-width: 500px;
+    /* width: 100%; 不要だと思われる*/
+}
+
+h2 {
+    color: #3a3a3a;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+#mute-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    background-image: url('sound-on-icon.png'); /* 音がオンの場合のアイコン */
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#mute-button.muted {
+    background-color: #f44336;
+    background-image: url('sound-off-icon.png'); /* ミュート時のアイコン */
+}
+
+#mute-button:hover {
+    transform: scale(1.1);
+}
+
+
+/* ログイン画面のスタイル */
+#login-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+#login-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#login-container input, #login-container select, #login-container button {
+    margin: 10px 0;
+    padding: 10px;
+    width: calc(100% - 22px);
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#login-container button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login-container button:hover {
+    background-color: #45a049;
+}
+
+/* 中央揃えとラベルの左端揃えの修正 */
+.question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* コンテンツを中央揃え */
+    padding: 20px;
+}
+
+.question div {
+    display: flex;
+    align-items: center;
+    width: 100%;         /* ラベル全体の幅をボックスいっぱいに */
+    max-width: 500px;    /* 最大幅を設定 */
+    margin: 10px 0;
+    justify-content: flex-start; /* 左寄せで揃える */
+}
+
+.question label {
+    width: calc(100% - 30px); /* ラジオボタン部分を除いた幅を設定 */
+    margin-left: 8px;         /* ラジオボタンとテキストの間に余白を追加 */
+    text-align: left;         /* テキストを左揃えにする */
+}
+
+/* ラジオボタン */
+input[type="radio"] {
+    margin-right: 8px;     /* ラジオボタンとラベルの間にスペースを追加 */
+}
+
+.explanation {
+    position: relative;
+    padding-top: 30px;
+    background-color: #e7f3fe;
+    border-left: 5px solid #2196F3;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    display: block; /* 確実に表示されるようにする */
+}
+
+.explanation > p:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    z-index: 1; /* 他の要素より前面に表示 */
+}
+
+.explanation > p:not(:first-child) {
+    margin-top: 20px; /* 「正解！」「不正解！」の下に余白を追加 */
+}
+.result-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+}
+
+.result-item strong {
+    display: inline-block;
+    width: auto; /* 固定幅を解除 */
+    margin-right: 5px;
+}
+
+.result-item .correct,
+.result-item .incorrect {
+    display: inline;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.result-item .correct {
+    background-color: #e8f5e9;
+    color: #4caf50;
+}
+
+.result-item .incorrect {
+    background-color: #ffebee;
+    color: #f44336;
+}.correct, .incorrect {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block; /* ブロック表示で左に揃える */
+}
+
+.correct {
+    color: #4CAF50;
+}
+
+.incorrect {
+    color: #f44336;
+}
+
+.score {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.music-note {
+    position: fixed;
+    font-size: 30px;
+    opacity: 0.4;
+    animation: float 5s infinite ease-in-out;
+    pointer-events: auto;
+    transition: opacity 1s ease-in-out;
+    cursor: pointer; /* ホバー時にポインターを表示 */
+}
+
+.music-note.fade-out {
+    opacity: 0; /* フェードアウト時に不透明度を0に */
+}
+
+/* 音符が上下にゆっくりと動くアニメーション */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+
+/* モバイル用のスタイル */
+@media (max-width: 480px) {
+    #app {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .question div {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .question label {
+        width: 100%;
+        margin-left: 0;  /* モバイルでは左余白をなくしてテキストを全幅に */
+    }
+
+    button {
+        width: 100%; /* ボタンを全幅に */
+        font-size: 16px; /* フォントサイズを少し小さく */
+    }
+
+    .progress-bar-container {
+        height: 15px;
+    }
+
+    .music-note {
+        font-size: 16px; /* 音符のサイズも小さく調整 */
+    }
+
+    .feedback-container textarea {
+        width: 100%; /* テキストエリアも全幅に */
+    }
+}
+
+/* タブレット用のスタイル */
+@media (min-width: 481px) and (max-width: 768px) {
+    #app {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    .question div {
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .question label {
+        width: calc(100% - 30px);
+        margin-left: 8px;
+    }
+
+    button {
+        width: 90%;
+        font-size: 18px;
+    }
+
+    .progress-bar-container {
+        height: 18px;
+    }
+
+    .music-note {
+        font-size: 24px;
+    }
+
+    .feedback-container textarea {
+        width: 90%;
+    }
+}
+
+/* デスクトップ用のスタイル */
+@media (min-width: 769px) {
+    #app {
+        padding: 30px;
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    .question div {
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .question label {
+        width: calc(100% - 40px);
+        margin-left: 10px;
+    }
+
+    button {
+        width: 80%;
+        font-size: 20px;
+    }
+
+    .progress-bar-container {
+        height: 20px;
+    }
+
+    .music-note {
+        font-size: 28px;
+    }
+
+    .feedback-container textarea {
+        width: 80%;
+    }
+}
+
+
+button {
+    width: 80%; /* ボタンの横幅を広げる */
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 18px; /* フォントサイズを大きく */
+    border-radius: 10px; /* 角を丸く */
+}
+
+.question button {
+    display: inline-block; /* ボタンをインラインブロックにして中央に揃える */
+}
+
+/* ラベルの左端を揃えるスタイルを追加 */
+.question label {
+    display: block;      /* ラベルをブロック要素にして幅を全体に広げる */
+    text-align: left;    /* テキストを左揃えにする */
+    margin-left: 20px;   /* ラベルの左側に余白を追加して、中央揃えと矛盾しないようにする */
+}
+
+button:hover {
+    background-color: #ff6347;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 新規追加 */
+.progress-bar-container {
+    background-color: #f3f3f3;
+    border-radius: 25px;
+    height: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: inset 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background-color: #ff7f50;
+    height: 100%;
+    border-radius: 25px;
+    transition: width 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.btn-secondary {
+    background-color: #000; /* 黒色のボタン */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto; /* ボタンを中央に */
+    padding: 15px;
+    width: 60%;
+    font-size: 18px;
+    border-radius: 10px; /* 角を丸く */
+}
+
+.btn-secondary:hover {
+    background-color: #333;
+}
+
+.btn-secondary:active {
+    background-color: #444;
+}
+
+/* フィードバック入力フィールドのスタイル */
+.feedback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 80%; /* 横幅を大きく */
+    height: 150px; /* 縦幅を大きく */
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
