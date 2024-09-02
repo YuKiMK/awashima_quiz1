@@ -374,6 +374,11 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* 無効状態のボタンに対するホバーのスタイルを無効化 */
+button:disabled:hover {
+    background-color: #cccccc; /* ホバーしても色を変えない */
+}
+
 /* 新規追加 */
 .progress-bar-container {
     background-color: #f3f3f3;
