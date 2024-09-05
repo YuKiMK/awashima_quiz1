@@ -14,7 +14,8 @@ const app = Vue.createApp({
             feedback: '',
             texts: {},
             questions: [],
-            randomizedQuestions: []
+            totalQuestions: 5,  // Limit to 5 questions
+            randomizedQuestions: [] // For storing the randomized questions
         };
     },
     created() {
@@ -32,18 +33,20 @@ const app = Vue.createApp({
                 this.texts = textsDataZh;
                 this.questions = questionsDataZh;
             }
-            this.shuffleQuestions();
+            this.randomizeQuestions();
             this.currentQuestionIndex = 0;
             this.currentAnswer = '';
             this.answered = false;
         },
-        shuffleQuestions() {
+        randomizeQuestions() {
             const shuffled = [...this.questions];
+            // Fisher-Yates shuffle
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
-            this.randomizedQuestions = shuffled.slice(0, 5); // 5問だけをランダムで選択
+            // Take the first 5 questions
+            this.randomizedQuestions = shuffled.slice(0, this.totalQuestions);
         },
         shuffleOptions() {
             this.randomizedQuestions.forEach(question => {
@@ -65,59 +68,74 @@ const app = Vue.createApp({
                 submitButton.disabled = true;
                 submitButton.style.backgroundColor = '#cccccc';
                 submitButton.style.cursor = 'not-allowed';
+                submitButton.classList.remove('active');
+            }
+        },
+        checkAnswerSelected() {
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                if (this.currentAnswer) {
+                    submitButton.disabled = false;
+                    submitButton.style.backgroundColor = '#4CAF50';
+                    submitButton.style.cursor = 'pointer';
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.style.backgroundColor = '#cccccc';
+                    submitButton.style.cursor = 'not-allowed';
+                }
             }
         },
         nextQuestion() {
             this.currentQuestionIndex++;
             this.currentAnswer = '';
             this.answered = false;
+
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.style.backgroundColor = '#cccccc';
+                submitButton.style.cursor = 'not-allowed';
+            }
+        },
+        login() {
+            if (this.name && this.roomNumber) {
+                this.loggedIn = true;
+                this.currentQuestionIndex = 0;
+            } else {
+                alert(this.texts.roomNumberPlaceholder);
+            }
         },
         showResults() {
             this.quizCompleted = true;
         },
-        shareResults() {
-            const scoreMessage = `淡島クイズで${this.score}点を獲得しました！`;
-            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(scoreMessage)}`;
-            window.open(url, '_blank');
-        },
         submitFeedback() {
-            if (this.feedback) {
+            const feedbackData = {
+                roomNumber: this.roomNumber,
+                name: this.name,
+                score: this.score,
+                feedback: this.feedback
+            };
+
+            if (this.feedback.trim() !== '') {
                 alert('ご感想・ご意見誠に有難うございます！');
             } else {
                 alert('また問題に挑戦してみてね');
             }
-            this.resetQuiz();
-        },
-        resetQuiz() {
+
             this.loggedIn = false;
+            this.name = '';
+            this.roomNumber = '';
             this.quizCompleted = false;
             this.currentQuestionIndex = 0;
             this.currentAnswer = '';
             this.score = 0;
             this.answers = [];
             this.feedback = '';
-            this.shuffleQuestions(); // クイズをリセットして再シャッフル
+            this.answered = false;
         }
     },
     mounted() {
         this.shuffleOptions();
-        const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-        const numNotes = 7;
-        for (let i = 0; i < numNotes; i++) {
-            const note = document.createElement('div');
-            note.className = 'music-note';
-            note.style.top = `${Math.random() * 80 + 10}vh`;
-            note.style.left = `${Math.random() * 80 + 10}vw`;
-            note.style.fontSize = `${20 + Math.random() * 30}px`;
-            note.textContent = notes[Math.floor(Math.random() * notes.length)];
-            note.addEventListener('click', () => {
-                note.classList.add('fade-out');
-                setTimeout(() => {
-                    note.remove();
-                }, 1000);
-            });
-            document.body.appendChild(note);
-        }
     },
     computed: {
         currentQuestion() {
@@ -127,10 +145,12 @@ const app = Vue.createApp({
             return this.currentQuestion.options || [];
         },
         progressPercentage() {
-            return ((this.currentQuestionIndex + 1) / this.randomizedQuestions.length) * 100;
-        },
-        displayedQuestions() {
-            return this.randomizedQuestions.slice(0, this.currentQuestionIndex + 1);
+            return ((this.currentQuestionIndex + 1) / this.totalQuestions) * 100;
+        }
+    },
+    watch: {
+        currentAnswer() {
+            this.checkAnswerSelected();
         }
     }
 });
