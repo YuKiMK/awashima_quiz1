@@ -13,7 +13,8 @@ const app = Vue.createApp({
             answered: false,
             feedback: '',
             texts: {},
-            questions: []
+            questions: [],
+            randomizedQuestions: []
         };
     },
     created() {
@@ -31,21 +32,21 @@ const app = Vue.createApp({
                 this.texts = textsDataZh;
                 this.questions = questionsDataZh;
             }
+            this.shuffleQuestions();
             this.currentQuestionIndex = 0;
             this.currentAnswer = '';
             this.answered = false;
         },
-        changeLanguage() {
-            this.loadLanguageData(this.selectedLanguage);
-        },
         shuffleQuestions() {
-            for (let i = this.questions.length - 1; i > 0; i--) {
+            const shuffled = [...this.questions];
+            for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
+            this.randomizedQuestions = shuffled.slice(0, 5); // 5問だけをランダムで選択
         },
         shuffleOptions() {
-            this.questions.forEach(question => {
+            this.randomizedQuestions.forEach(question => {
                 for (let i = question.options.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [question.options[i], question.options[j]] = [question.options[j], question.options[i]];
@@ -59,72 +60,17 @@ const app = Vue.createApp({
             if (this.currentAnswer === this.currentQuestion.correct) {
                 this.score++;
             }
-            // 回答ボタンを無効にして色を固定
             const submitButton = document.querySelector('.btn-primary');
             if (submitButton) {
-                submitButton.disabled = true; // ボタンを無効化
-                submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
-                submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
-                submitButton.classList.remove('active'); // アクティブ状態を解除
-            }
-        },
-        checkAnswerSelected() {
-            const submitButton = document.querySelector('.btn-primary');
-            if (submitButton) {
-                if (this.currentAnswer) {
-                    submitButton.disabled = false; // ボタンを有効化
-                    submitButton.style.backgroundColor = '#4CAF50'; // 背景色を緑に戻す
-                    submitButton.style.cursor = 'pointer'; // カーソルを「押せる」状態に
-                } else {
-                    submitButton.disabled = true; // ボタンを無効化
-                    submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
-                    submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
-                }
+                submitButton.disabled = true;
+                submitButton.style.backgroundColor = '#cccccc';
+                submitButton.style.cursor = 'not-allowed';
             }
         },
         nextQuestion() {
             this.currentQuestionIndex++;
             this.currentAnswer = '';
             this.answered = false;
-
-            // 回答ボタンの状態をリセット
-            const submitButton = document.querySelector('.btn-primary');
-            if (submitButton) {
-                submitButton.disabled = true; // 次の問題では再び無効からスタート
-                submitButton.style.backgroundColor = '#cccccc'; // 背景色を灰色に固定
-                submitButton.style.cursor = 'not-allowed'; // カーソルを「押せない」状態に
-            }
-        },
-        reappearNote() {
-            setTimeout(() => {
-                const note = document.createElement('div');
-                const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-                note.className = 'music-note';
-                note.style.top = `${Math.random() * 80 + 10}vh`;
-                note.style.left = `${Math.random() * 80 + 10}vw`;
-                note.style.fontSize = `${20 + Math.random() * 30}px`;
-                note.style.opacity = 0;
-                note.textContent = notes[Math.floor(Math.random() * notes.length)];
-                document.body.appendChild(note);
-                setTimeout(() => {
-                    note.style.opacity = 0.2;
-                }, 100);
-                note.addEventListener('click', () => {
-                    note.classList.add('fade-out');
-                    setTimeout(() => {
-                        note.remove();
-                        this.reappearNote();
-                    }, 1000);
-                });
-            }, 3000);
-        },
-        login() {
-            if (this.name && this.roomNumber) {
-                this.loggedIn = true;
-                this.currentQuestionIndex = 0;
-            } else {
-                alert(this.texts.roomNumberPlaceholder);
-            }
         },
         showResults() {
             this.quizCompleted = true;
@@ -135,19 +81,25 @@ const app = Vue.createApp({
             window.open(url, '_blank');
         },
         submitFeedback() {
-            const feedbackData = {
-                roomNumber: this.roomNumber,
-                name: this.name,
-                score: this.score,
-                feedback: this.feedback
-            };
-
-            console.log('Feedback submitted:', feedbackData);
-            alert('ご意見ありがとうございます！');
+            if (this.feedback) {
+                alert('ご感想・ご意見誠に有難うございます！');
+            } else {
+                alert('また問題に挑戦してみてね');
+            }
+            this.resetQuiz();
+        },
+        resetQuiz() {
+            this.loggedIn = false;
+            this.quizCompleted = false;
+            this.currentQuestionIndex = 0;
+            this.currentAnswer = '';
+            this.score = 0;
+            this.answers = [];
+            this.feedback = '';
+            this.shuffleQuestions(); // クイズをリセットして再シャッフル
         }
     },
     mounted() {
-        this.shuffleQuestions();
         this.shuffleOptions();
         const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
         const numNotes = 7;
@@ -162,7 +114,6 @@ const app = Vue.createApp({
                 note.classList.add('fade-out');
                 setTimeout(() => {
                     note.remove();
-                    this.reappearNote();
                 }, 1000);
             });
             document.body.appendChild(note);
@@ -170,18 +121,16 @@ const app = Vue.createApp({
     },
     computed: {
         currentQuestion() {
-            return this.questions[this.currentQuestionIndex] || {};
+            return this.randomizedQuestions[this.currentQuestionIndex] || {};
         },
         currentOptions() {
             return this.currentQuestion.options || [];
         },
         progressPercentage() {
-            return ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
-        }
-    },
-    watch: {
-        currentAnswer() {
-            this.checkAnswerSelected();
+            return ((this.currentQuestionIndex + 1) / this.randomizedQuestions.length) * 100;
+        },
+        displayedQuestions() {
+            return this.randomizedQuestions.slice(0, this.currentQuestionIndex + 1);
         }
     }
 });
