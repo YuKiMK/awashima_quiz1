@@ -21,7 +21,6 @@ body {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
     max-width: 500px;
-    /* width: 100%; 不要だと思われる*/
 }
 
 h2 {
@@ -31,34 +30,6 @@ h2 {
     font-size: 1.5em;
 }
 
-#mute-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #4CAF50;
-    background-image: url('sound-on-icon.png'); /* 音がオンの場合のアイコン */
-    background-size: 70%;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-#mute-button.muted {
-    background-color: #f44336;
-    background-image: url('sound-off-icon.png'); /* ミュート時のアイコン */
-}
-
-#mute-button:hover {
-    transform: scale(1.1);
-}
-
-
-/* ログイン画面のスタイル */
 #login-container {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 30px;
@@ -75,7 +46,9 @@ h2 {
     color: #333;
 }
 
-#login-container input, #login-container select, #login-container button {
+#login-container input,
+#login-container select,
+#login-container button {
     margin: 10px 0;
     padding: 10px;
     width: calc(100% - 22px);
@@ -95,94 +68,42 @@ h2 {
     background-color: #45a049;
 }
 
-/* 中央揃えとラベルの左端揃えの修正 */
 .question {
     display: flex;
     flex-direction: column;
-    align-items: center;  /* コンテンツを中央揃え */
+    align-items: center;
     padding: 20px;
 }
 
-/* 選択肢の文字と丸ぽちを正しく配置 */
 .question div {
     display: flex;
     align-items: center;
     width: 100%;
     max-width: 500px;
     margin: 10px 0;
-    justify-content: flex-start; /* 左寄せで揃える */
+    justify-content: flex-start;
 }
 
 .question label {
+    width: calc(100% - 30px);
     margin-left: 8px;
     text-align: left;
-    word-break: break-word; /* 長いテキストを折り返し */
 }
 
 input[type="radio"] {
     margin-right: 8px;
-    flex-shrink: 0; /* ラジオボタンが小さくならないようにする */
 }
 
 .explanation {
-    position: relative;
-    padding-top: 30px;
     background-color: #e7f3fe;
     border-left: 5px solid #2196F3;
     padding: 10px;
     margin-top: 10px;
     text-align: center;
-    display: block; /* 確実に表示されるようにする */
 }
 
-.explanation > p:first-child {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 1.1em;
-    margin-bottom: 10px;
-    padding: 5px 0;
-    z-index: 1; /* 他の要素より前面に表示 */
-}
-
-.explanation > p:not(:first-child) {
-    margin-top: 20px; /* 「正解！」「不正解！」の下に余白を追加 */
-}
-.result-item {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    border: 1px solid #e0e0e0;
-}
-
-.result-item strong {
-    display: inline-block;
-    width: auto; /* 固定幅を解除 */
-    margin-right: 5px;
-}
-
-.result-item .correct,
-.result-item .incorrect {
-    display: inline;
-    padding: 2px 5px;
-    border-radius: 3px;
-}
-
-.result-item .correct {
-    background-color: #e8f5e9;
-    color: #4caf50;
-}
-
-.result-item .incorrect {
-    background-color: #ffebee;
-    color: #f44336;
-}.correct, .incorrect {
+.correct, .incorrect {
     font-weight: bold;
-    margin-bottom: 10px;
-    display: block; /* ブロック表示で左に揃える */
 }
 
 .correct {
@@ -193,211 +114,23 @@ input[type="radio"] {
     color: #f44336;
 }
 
-.score {
-    font-size: 24px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.result-item {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-}
-
-.music-note {
-    position: fixed;
-    font-size: 30px;
-    opacity: 0.2;
-    animation: float 5s infinite ease-in-out;
-    pointer-events: auto;
-    transition: opacity 1s ease-in-out;
-    cursor: pointer; /* ホバー時にポインターを表示 */
-}
-
-.music-note.fade-out {
-    opacity: 0; /* フェードアウト時に不透明度を0に */
-}
-
-/* 音符が上下にゆっくりと動くアニメーション */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-
-/* モバイル用のスタイル */
-@media (max-width: 480px) {
-    #app {
-        padding: 15px;
-    }
-
-    h2 {
-        font-size: 1.2em;
-    }
-
-    /* .question div {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 10px;
-    } */
-
-    /* .question label {
-        width: 100%;
-        margin-left: 0; 
-    } */
-
-    button {
-        width: 100%; /* ボタンを全幅に */
-        font-size: 16px; /* フォントサイズを少し小さく */
-    }
-
-    .progress-bar-container {
-        height: 15px;
-    }
-
-    .music-note {
-        font-size: 16px; /* 音符のサイズも小さく調整 */
-    }
-
-    .feedback-container textarea {
-        width: 100%; /* テキストエリアも全幅に */
-    }
-    .question div {
-        flex-direction: row; /* Ensure flex direction is row for alignment */
-        align-items: center; /* Align items in the center */
-    }
-
-    input[type="radio"] {
-        margin-right: 8px;
-        flex-shrink: 0;
-        margin-top: 0; /* Ensure radio button stays aligned with the label text */
-    }
-
-    .question label {
-        width: auto; /* Ensure label takes up available space */
-        margin-left: 8px;
-    }
-
-}
-
-/* タブレット用のスタイル */
-@media (min-width: 481px) and (max-width: 768px) {
-    #app {
-        padding: 20px;
-    }
-
-    h2 {
-        font-size: 1.4em;
-    }
-
-    .question div {
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .question label {
-        width: calc(100% - 30px);
-        margin-left: 8px;
-    }
-
-    button {
-        width: 90%;
-        font-size: 18px;
-    }
-
-    .progress-bar-container {
-        height: 18px;
-    }
-
-    .music-note {
-        font-size: 24px;
-    }
-
-    .feedback-container textarea {
-        width: 90%;
-    }
-}
-
-/* デスクトップ用のスタイル */
-@media (min-width: 769px) {
-    #app {
-        padding: 30px;
-    }
-
-    h2 {
-        font-size: 1.6em;
-    }
-
-    .question div {
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .question label {
-        width: calc(100% - 40px);
-        margin-left: 10px;
-    }
-
-    button {
-        width: 80%;
-        font-size: 20px;
-    }
-
-    .progress-bar-container {
-        height: 20px;
-    }
-
-    .music-note {
-        font-size: 28px;
-    }
-
-    .feedback-container textarea {
-        width: 80%;
-    }
-}
-
-
 button {
-    width: 80%; /* ボタンの横幅を広げる */
+    width: 80%;
     padding: 15px;
     margin: 10px 0;
-    font-size: 18px; /* フォントサイズを大きく */
-    border-radius: 10px; /* 角を丸く */
-}
-
-.question button {
-    display: inline-block; /* ボタンをインラインブロックにして中央に揃える */
-}
-
-/* ラベルの左端を揃えるスタイルを追加 */
-.question label {
-    display: block;      /* ラベルをブロック要素にして幅を全体に広げる */
-    text-align: left;    /* テキストを左揃えにする */
-    margin-left: 20px;   /* ラベルの左側に余白を追加して、中央揃えと矛盾しないようにする */
+    font-size: 18px;
+    border-radius: 10px;
 }
 
 button:hover {
-    background-color: #ff6347;
-    transform: translateY(-2px);
+    transform: none;
 }
 
 button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
-    transform: none; /* Prevent floating effect */
 }
 
-/* 無効状態のボタンに対するホバーのスタイルを無効化 */
-button:disabled:hover {
-    background-color: #cccccc; /* ホバーしても色を変えない */
-    transform: none; /* No translate effect on hover */
-}
-
-/* 新規追加 */
 .progress-bar-container {
     background-color: #f3f3f3;
     border-radius: 25px;
@@ -414,6 +147,25 @@ button:disabled:hover {
     transition: width 0.3s ease-in-out;
 }
 
+.feedback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 80%;
+    height: 150px;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .btn-primary {
     background-color: #4CAF50;
     color: white;
@@ -427,17 +179,17 @@ button:disabled:hover {
 }
 
 .btn-secondary {
-    background-color: #000; /* 黒色のボタン */
+    background-color: #000;
     color: white;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: block;
-    margin: 20px auto; /* ボタンを中央に */
+    margin: 20px auto;
     padding: 15px;
     width: 60%;
     font-size: 18px;
-    border-radius: 10px; /* 角を丸く */
+    border-radius: 10px;
 }
 
 .btn-secondary:hover {
@@ -446,24 +198,4 @@ button:disabled:hover {
 
 .btn-secondary:active {
     background-color: #444;
-}
-
-/* フィードバック入力フィールドのスタイル */
-.feedback-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-textarea {
-    width: 80%; /* 横幅を大きく */
-    height: 150px; /* 縦幅を大きく */
-    padding: 15px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    resize: none;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
