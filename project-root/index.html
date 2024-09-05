@@ -49,8 +49,8 @@
                     </p>
                     <p>{{ currentQuestion.explanation }}</p>
                 </div>
-                <button v-if="answered && currentQuestionIndex < totalQuestions - 1" @click="nextQuestion" class="btn-primary">{{ texts.nextButton }}</button>
-                <button v-if="answered && currentQuestionIndex === totalQuestions - 1" @click="showResults" class="btn-primary">{{ texts.showResultsButton }}</button>
+                <button v-if="answered && currentQuestionIndex < questions.length - 1" @click="nextQuestion" class="btn-primary">{{ texts.nextButton }}</button>
+                <button v-if="answered && currentQuestionIndex === questions.length - 1" @click="showResults" class="btn-primary">{{ texts.showResultsButton }}</button>
             </div>
         </div>
 
@@ -58,9 +58,9 @@
         <div v-else-if="quizCompleted">
             <h2>{{ texts.resultsTitle }}</h2>
             <div class="score">
-                {{ texts.yourScore }}: {{ score }} / {{ totalQuestions }}
+                {{ texts.yourScore }}: {{ score }} / {{ questions.length }}
             </div>
-            <div class="result-item" v-for="(question, index) in randomizedQuestions" :key="index">
+            <div class="result-item" v-for="(question, index) in questions" :key="index">
                 <p><strong>{{ texts.questionLabel }} {{ index + 1 }}:</strong> {{ question.text }}</p>
                 <p>
                     <strong>{{ texts.yourAnswer }}:</strong> 
@@ -75,22 +75,30 @@
                 <p><strong>{{ texts.explanation }}:</strong> {{ question.explanation }}</p>
             </div>
             <div class="feedback-container">
+                <p>淡島クイズお疲れさまでした。<br>よろしければご滞在中の感想をお聞かせください。</p>
                 <textarea v-model="feedback" placeholder="自由回答"></textarea>
-                <button @click="submitFeedback" class="btn-primary">{{ texts.submitFeedback }}</button>
+                <button @click="submitFeedback" class="btn-primary">回答を終える</button>
             </div>
+            <button @click="shareResults" class="btn-secondary x-share-button">Xでスコアを共有する</button>
         </div>
+        
+        <!-- BGM -->
         <audio id="bgm" loop>
             <source src="assets/bgm.mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
+        
+        <!-- 初回クリックでBGM再生 -->
         <script>
         document.addEventListener('click', function() {
             const bgm = document.getElementById('bgm');
-            bgm.muted = false;
+            bgm.muted = false;  // ミュートを解除
             bgm.play();
         });
         </script>
-        <script src="js/app.js"></script>
     </div>
+
+    <!-- app.js の読み込み -->
+    <script src="js/app.js"></script>
 </body>
 </html>
