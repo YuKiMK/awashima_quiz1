@@ -14,6 +14,8 @@ const app = Vue.createApp({
             feedback: '',
             texts: {},
             questions: []
+            totalQuestions: 5,  // Limit to 5 questions
+            randomizedQuestions: [], // To store the 5 randomized questions
         };
     },
     created() {
