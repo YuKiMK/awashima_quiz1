@@ -14,31 +14,57 @@ const app = Vue.createApp({
             feedback: '',
             texts: {},
             questions: [],
-            limitedQuestions: []  // 5問限定のリスト
+            limitedQuestions: [],  // 5問限定のリスト
+            roomNumberPlaceholder: '',
+            namePlaceholder: '',
+            startQuizButton: '',
+            musicNotes: [],
+            notes: ['♪', '♫', '♬', '♩', '♭', '♮'],
+            numNotes: 7
         };
     },
     created() {
         this.loadLanguageData(this.selectedLanguage);
     },
-    methods: {
+
+    mounted() {
+        this.generateInitialNotes();
+    },
+
+    methods: {   
         loadLanguageData(language) {
             if (language === 'ja') {
                 this.texts = textsDataJa;
-                this.questions = this.shuffleArray(questionsDataJa).slice(0, 5); // 8問からランダムに5問取得
+                this.questions = this.prepareQuestions(questionsDataJa);
             } else if (language === 'en') {
                 this.texts = textsDataEn;
-                this.questions = this.shuffleArray(questionsDataEn).slice(0, 5);
+                this.questions = this.prepareQuestions(questionsDataEn);
             } else if (language === 'zh') {
                 this.texts = textsDataZh;
-                this.questions = this.shuffleArray(questionsDataZh).slice(0, 5);
+                this.questions = this.prepareQuestions(questionsDataZh);
             }
-            this.limitedQuestions = this.questions;
-            this.currentQuestionIndex = 0;
-            this.currentAnswer = '';
-            this.answered = false;
+            this.shuffleQuestions();
+            
+            // 各言語のプレースホルダーとボタンのテキストを更新
+            this.roomNumberPlaceholder = this.texts.roomNumberPlaceholder;
+            this.namePlaceholder = this.texts.namePlaceholder;
+            this.startQuizButton = this.texts.startQuizButton;
+
+            this.resetQuiz();
+        },
+
+        prepareQuestions(questions) {
+            return questions.map(q => ({
+                ...q,
+                options: this.shuffleArray([...q.options]),
+                originalIndex: q.options.indexOf(q.correct)
+            }));
+        },
+
+        shuffleQuestions() {
+            this.limitedQuestions = this.shuffleArray([...this.questions]).slice(0, 5);
         },
         shuffleArray(array) {
-            // Fisher-Yatesアルゴリズムでシャッフル
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -49,7 +75,9 @@ const app = Vue.createApp({
             this.answered = true;
             this.answers[this.currentQuestionIndex] = this.currentAnswer;
 
-            if (this.currentAnswer === this.currentQuestion.correct) {
+            // 正解のチェックを修正
+            const currentQuestion = this.limitedQuestions[this.currentQuestionIndex];
+            if (this.currentAnswer === currentQuestion.options[currentQuestion.originalIndex]) {
                 this.score++;
             }
 
@@ -60,41 +88,36 @@ const app = Vue.createApp({
                 submitButton.style.cursor = 'not-allowed';
                 submitButton.classList.remove('active');
             }
+
+            // 全問題に回答したら結果を表示
+            if (this.currentQuestionIndex === this.limitedQuestions.length - 1) {
+                setTimeout(() => this.showResults(), 1000);  // 1秒後に結果を表示
+            }
         },
         checkAnswerSelected() {
             const submitButton = document.querySelector('.btn-primary');
             if (submitButton) {
-                if (this.currentAnswer) {
-                    submitButton.disabled = false;
-                    submitButton.style.backgroundColor = '#4CAF50';
-                    submitButton.style.cursor = 'pointer';
-                } else {
-                    submitButton.disabled = true;
-                    submitButton.style.backgroundColor = '#cccccc';
-                    submitButton.style.cursor = 'not-allowed';
-                }
+                submitButton.disabled = !this.currentAnswer;
+                submitButton.style.backgroundColor = this.currentAnswer ? '#4CAF50' : '#cccccc';
+                submitButton.style.cursor = this.currentAnswer ? 'pointer' : 'not-allowed';
             }
         },
         nextQuestion() {
-            this.currentQuestionIndex++;
-            this.currentAnswer = '';
-            this.answered = false;
-
-            const submitButton = document.querySelector('.btn-primary');
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.style.backgroundColor = '#cccccc';
-                submitButton.style.cursor = 'not-allowed';
+            if (this.currentQuestionIndex < this.limitedQuestions.length - 1) {
+                this.currentQuestionIndex++;
+                this.currentAnswer = '';
+                this.answered = false;
+                this.checkAnswerSelected();
+            } else {
+                this.showResults();
             }
         },
         login() {
             if (this.name && this.roomNumber) {
                 this.loggedIn = true;
-                this.loadLanguageData(this.selectedLanguage);  // クイズの質問をロードする
-                this.shuffleQuestions();  // 質問をシャッフルする
-                this.currentQuestionIndex = 0; // クイズを最初の質問からスタート
+                this.resetQuiz();
             } else {
-                alert(this.texts.roomNumberPlaceholder);
+                alert(this.texts.loginError || 'Please enter both name and room number.');
             }
         },
         showResults() {
@@ -108,16 +131,13 @@ const app = Vue.createApp({
                 feedback: this.feedback
             };
 
-            if (this.feedback.trim() !== '') {
-                alert('ご感想・ご意見誠に有難うございます！');
-            } else {
-                alert('また問題に挑戦してみてね');
-            }
+            alert(this.feedback.trim() !== '' ? this.texts.thankYouFeedback : this.texts.tryAgain);
 
-            // 初期状態に戻す
+            console.log('Feedback submitted:', feedbackData);
+            this.resetQuiz();
             this.loggedIn = false;
-            this.name = '';
-            this.roomNumber = '';
+        },
+        resetQuiz() {
             this.quizCompleted = false;
             this.currentQuestionIndex = 0;
             this.currentAnswer = '';
@@ -125,8 +145,37 @@ const app = Vue.createApp({
             this.answers = [];
             this.feedback = '';
             this.answered = false;
+            this.shuffleQuestions();
+        },
+        changeLanguage() {
+            this.loadLanguageData(this.selectedLanguage);
+        },
 
-            console.log('Feedback submitted:', feedbackData);
+        generateInitialNotes() {
+            for (let i = 0; i < this.numNotes; i++) {
+                this.addNote();
+            }
+        },
+        addNote() {
+            const note = {
+                id: Date.now() + Math.random(),
+                symbol: this.notes[Math.floor(Math.random() * this.notes.length)],
+                top: `${Math.random() * 80 + 10}vh`,
+                left: `${Math.random() * 80 + 10}vw`,
+                fontSize: `${20 + Math.random() * 30}px`,
+                opacity: 0.2
+            };
+            this.musicNotes.push(note);
+        },
+        removeNote(noteId) {
+            const index = this.musicNotes.findIndex(note => note.id === noteId);
+            if (index !== -1) {
+                this.musicNotes[index].opacity = 0;
+                setTimeout(() => {
+                    this.musicNotes.splice(index, 1);
+                    this.addNote();  // 新しい音符を追加
+                }, 1000);
+            }
         }
     },
     computed: {
@@ -143,8 +192,25 @@ const app = Vue.createApp({
     watch: {
         currentAnswer() {
             this.checkAnswerSelected();
+        },
+        selectedLanguage() {
+            this.changeLanguage();
         }
     }
+});
+
+app.component('music-notes', {
+    template: `
+        <div>
+            <div v-for="note in musicNotes" :key="note.id" 
+                class="music-note" 
+                :style="{ top: note.top, left: note.left, fontSize: note.fontSize, opacity: note.opacity }"
+                @click="$emit('remove-note', note.id)">
+                {{ note.symbol }}
+            </div>
+        </div>
+    `,
+    props: ['musicNotes']
 });
 
 app.mount('#app');
