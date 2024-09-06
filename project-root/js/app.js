@@ -89,18 +89,9 @@ const app = Vue.createApp({
                 submitButton.classList.remove('active');
             }
 
-            // 全問題に回答したら結果を表示
-            if (this.currentQuestionIndex === this.limitedQuestions.length - 1) {
-                setTimeout(() => this.showResults(), 1000);  // 1秒後に結果を表示
-            }
-        },
-        checkAnswerSelected() {
-            const submitButton = document.querySelector('.btn-primary');
-            if (submitButton) {
-                submitButton.disabled = !this.currentAnswer;
-                submitButton.style.backgroundColor = this.currentAnswer ? '#4CAF50' : '#cccccc';
-                submitButton.style.cursor = this.currentAnswer ? 'pointer' : 'not-allowed';
-            }
+            // 自動的に次の質問に進まないようにします
+            // 最後の質問でない場合は、nextQuestionボタンが表示されます
+            // 最後の質問の場合は、showResultsボタンが表示されます
         },
         nextQuestion() {
             if (this.currentQuestionIndex < this.limitedQuestions.length - 1) {
@@ -108,8 +99,18 @@ const app = Vue.createApp({
                 this.currentAnswer = '';
                 this.answered = false;
                 this.checkAnswerSelected();
-            } else {
-                this.showResults();
+            }
+        },
+        showResults() {
+            this.quizCompleted = true;
+        },
+
+        checkAnswerSelected() {
+            const submitButton = document.querySelector('.btn-primary');
+            if (submitButton) {
+                submitButton.disabled = !this.currentAnswer;
+                submitButton.style.backgroundColor = this.currentAnswer ? '#4CAF50' : '#cccccc';
+                submitButton.style.cursor = this.currentAnswer ? 'pointer' : 'not-allowed';
             }
         },
         login() {
