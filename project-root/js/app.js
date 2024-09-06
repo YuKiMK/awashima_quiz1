@@ -156,6 +156,29 @@ const app = Vue.createApp({
             console.log('Feedback submitted:', feedbackData);
         }
     },
+    mounted() {
+        this.shuffleQuestions();
+        this.shuffleOptions();
+        const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
+        const numNotes = 7;
+        for (let i = 0; i < numNotes; i++) {
+            const note = document.createElement('div');
+            note.className = 'music-note';
+            note.style.top = `${Math.random() * 80 + 10}vh`;
+            note.style.left = `${Math.random() * 80 + 10}vw`;
+            note.style.fontSize = `${20 + Math.random() * 30}px`;
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+            note.addEventListener('click', () => {
+                note.classList.add('fade-out');
+                setTimeout(() => {
+                    note.remove();
+                    this.reappearNote();
+                }, 1000);
+            });
+            document.body.appendChild(note);
+        }
+    },
+    
     computed: {
         currentQuestion() {
             return this.limitedQuestions[this.currentQuestionIndex] || {};
