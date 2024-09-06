@@ -37,9 +37,6 @@ const app = Vue.createApp({
             this.currentAnswer = '';
             this.answered = false;
         },
-        changeLanguage() {
-            this.loadLanguageData (this.selectedLanguage);
-        },
         shuffleArray(array) {
             // Fisher-Yatesアルゴリズムでシャッフル
             for (let i = array.length - 1; i > 0; i--) {
@@ -90,43 +87,6 @@ const app = Vue.createApp({
                 submitButton.style.cursor = 'not-allowed';
             }
         },
-        
-        reappearNote() {
-            setTimeout(() => {
-                const note = document.createElement('div');
-                const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-                note.className = 'music-note';
-                note.style.top = `${Math.random() * 80 + 10}vh`;
-                note.style.left = `${Math.random() * 80 + 10}vw`;
-                note.style.fontSize = `${20 + Math.random() * 30}px`;
-                note.style.opacity = 0;
-                note.textContent = notes[Math.floor(Math.random() * notes.length)];
-                document.body.appendChild(note);
-                setTimeout(() => {
-                    note.style.opacity = 0.2;
-                }, 100);
-                note.addEventListener('click', () => {
-                    note.classList.add('fade-out');
-                    setTimeout(() => {
-                        note.remove();
-                        this.reappearNote();
-                    }, 1000);
-                });
-            }, 3000);
-        },
-        
-        login() {
-            if (this.name && this.roomNumber) {
-                this.loggedIn = true;
-                
-                this.loadLanguageData(this.selectedLanguage);  // クイズの質問をロードする
-                this.shuffleQuestions();  // 質問をシャッフルする
-                this.currentQuestionIndex = 0; // クイズを最初の質問からスタート
-            } else {
-                alert(this.texts.roomNumberPlaceholder);
-            }
-        },
-        
         showResults() {
             this.quizCompleted = true;
         },
@@ -159,37 +119,15 @@ const app = Vue.createApp({
             console.log('Feedback submitted:', feedbackData);
         }
     },
-    mounted() {
-        this.shuffleQuestions();
-        this.shuffleOptions();
-        const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-        const numNotes = 7;
-        for (let i = 0; i < numNotes; i++) {
-            const note = document.createElement('div');
-            note.className = 'music-note';
-            note.style.top = `${Math.random() * 80 + 10}vh`;
-            note.style.left = `${Math.random() * 80 + 10}vw`;
-            note.style.fontSize = `${20 + Math.random() * 30}px`;
-            note.textContent = notes[Math.floor(Math.random() * notes.length)];
-            note.addEventListener('click', () => {
-                note.classList.add('fade-out');
-                setTimeout(() => {
-                    note.remove();
-                    this.reappearNote();
-                }, 1000);
-            });
-            document.body.appendChild(note);
-        }
-    },
     computed: {
         currentQuestion() {
-            return this.questions[this.currentQuestionIndex] || {};
+            return this.limitedQuestions[this.currentQuestionIndex] || {};
         },
         currentOptions() {
             return this.currentQuestion.options || [];
         },
         progressPercentage() {
-            return ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+            return ((this.currentQuestionIndex + 1) / this.limitedQuestions.length) * 100;
         }
     },
     watch: {
