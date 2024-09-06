@@ -209,18 +209,17 @@ input[type="radio"] {
 .music-note {
     position: fixed;
     font-size: 30px;
-    opacity: 0.2;
+    opacity: 0.2; /* 薄い色で表示 */
     animation: float 5s infinite ease-in-out;
     pointer-events: auto;
     transition: opacity 1s ease-in-out;
-    cursor: pointer; /* ホバー時にポインターを表示 */
+    cursor: pointer;
 }
 
 .music-note.fade-out {
     opacity: 0; /* フェードアウト時に不透明度を0に */
 }
 
-/* 音符が上下にゆっくりと動くアニメーション */
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-20px); }
