@@ -35,12 +35,24 @@ const questionsDataZh = [
         options: ['冈本太郎', '安田侃', '草间弥生', '佐藤忠良'],
         correct: '安田侃',
         explanation: '这是一件由北海道出生、在意大利活动的日本雕塑家“安田侃”创作的雕塑。照片中的作品象征着无法逃脱的束缚（插入球体的杆）和人类的心灵（球体）。'
+    },
+    {
+        text: '淡岛酒店一楼的建筑面积有多大？',
+        options: ['约3,000㎡', '约2,000㎡', '约1,500㎡', '约5,000㎡'],
+        correct: '约3,000㎡',
+        explanation: '淡岛酒店一楼的建筑面积约为3,000平方米。'
+    },
+    {
+        text: '过去除了船以外，还有其他方式可以到达岛上。那是什么方式呢？',
+        options: ['缆车', '步行桥', '海底隧道', '水上摩托車'],
+        correct: '缆车',
+        explanation: '直到2008年，缆车曾经是到达岛上的一种交通方式。由于老化问题，目前已停止使用。岛中央的粉红色建筑曾经是缆车站。'
     }
 ];
 
 const textsDataZh = {
     welcome: '欢迎！',
-    loginButton: '登录',
+    startQuizButton: '开始回答',
     roomNumberPlaceholder: '请输入您的房间号',
     namePlaceholder: '请输入您的名字',
     quizTitle: '开始测试',
