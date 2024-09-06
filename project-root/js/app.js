@@ -37,6 +37,9 @@ const app = Vue.createApp({
             this.currentAnswer = '';
             this.answered = false;
         },
+        changeLanguage() ‹
+            this.loadLanguageData (this.selectedLanguage);
+        },
         shuffleArray(array) {
             // Fisher-Yatesアルゴリズムでシャッフル
             for (let i = array.length - 1; i > 0; i--) {
