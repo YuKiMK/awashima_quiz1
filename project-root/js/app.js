@@ -14,39 +14,26 @@ const app = Vue.createApp({
             feedback: '',
             texts: {},
             questions: []
-            totalQuestions: 5,  // Limit to 5 questions
-            randomizedQuestions: [], // To store the 5 randomized questions
         };
     },
     created() {
         this.loadLanguageData(this.selectedLanguage);
     },
     methods: {
-    loadLanguageData(language) {
-        if (language === 'ja') {
-            this.texts = textsDataJa;
-            this.questions = questionsDataJa;
-        } else if (language === 'en') {
-            this.texts = textsDataEn;
-            this.questions = questionsDataEn;
-        } else if (language === 'zh') {
-        this.texts = textsDataZh;
-        this.questions = questionsDataZh;
-        }
-        this.randomizeQuestions();
-        this.currentQuestionIndex = 0;
-        this.currentAnswer = '';
-        this.answered = false;
-    },
-    randomizeQuestions() {
-        const shuffled = [...this.questions];
-        // Fisher-Yates shuffle
-        for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-    // Take only the first 5 questions
-    this.randomizedQuestions = shuffled.slice(0, this.totalQuestions);
+        loadLanguageData(language) {
+            if (language === 'ja') {
+                this.texts = textsDataJa;
+                this.questions = questionsDataJa;
+            } else if (language === 'en') {
+                this.texts = textsDataEn;
+                this.questions = questionsDataEn;
+            } else if (language === 'zh') {
+                this.texts = textsDataZh;
+                this.questions = questionsDataZh;
+            }
+            this.currentQuestionIndex = 0;
+            this.currentAnswer = '';
+            this.answered = false;
         },
         changeLanguage() {
             this.loadLanguageData(this.selectedLanguage);
