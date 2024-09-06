@@ -37,7 +37,7 @@ const app = Vue.createApp({
             this.currentAnswer = '';
             this.answered = false;
         },
-        changeLanguage() ‹
+        changeLanguage() {
             this.loadLanguageData (this.selectedLanguage);
         },
         shuffleArray(array) {
