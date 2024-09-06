@@ -35,11 +35,24 @@ const questionsDataEn = [
         options: ['Taro Okamoto', 'Kan Yasuda', 'Yayoi Kusama', 'Churyo Sato'],
         correct: 'Kan Yasuda',
         explanation: 'This is a sculpture by "Kan Yasuda," a sculptor from Hokkaido who is based in Italy. The sculpture in the photo represents the inescapable constraints (the pole) that pierce the human heart (the sphere).'
+    },
+    {
+        text: 'How large is the floor area of the first floor of the Awashima Hotel?',
+        options: ['Approx. 3,000㎡', 'Approx. 2,000㎡', 'Approx. 1,500㎡', 'Approx. 5,000㎡'],
+        correct: 'Approx. 3,000㎡',
+        explanation: 'The first floor of Awashima Hotel has a floor area of approximately 3,000 square meters.'
+    },
+    {
+        text: 'There was once another way to reach the island besides by boat. What was it?',
+        options: ['Cable car', 'Footbridge', 'Undersea tunnel', 'Jet ski'],
+        correct: 'Cable car',
+        explanation: 'Until 2008, a cable car was used as one of the ways to reach the island. Due to aging, it is now closed. The pink building visible in the middle of the island was once the cable car station.'
     }
+
 ];
 const textsDataEn = {
     welcome: 'Welcome!',
-    loginButton: 'Login',
+    startQuizButton: 'Start Quiz',
     roomNumberPlaceholder: 'Enter your room number',
     namePlaceholder: 'Enter your name',
     quizTitle: 'Start the Quiz',
