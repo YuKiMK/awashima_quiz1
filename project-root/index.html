@@ -12,7 +12,55 @@
     <script src="js/questions_zh.js"></script>
 </head>
 <body>
-    
+    <script>
+    // 音符を生成する処理をVueとは独立して実行
+    document.addEventListener('DOMContentLoaded', function () {
+        const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
+        const numNotes = 7; // 音符の数を調整
+
+        for (let i = 0; i < numNotes; i++) {
+            const note = document.createElement('div');
+            note.className = 'music-note';
+            note.style.top = `${Math.random() * 80 + 10}vh`;
+            note.style.left = `${Math.random() * 80 + 10}vw`;
+            note.style.fontSize = `${20 + Math.random() * 30}px`;
+            note.style.opacity = 0.2;
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+
+            note.addEventListener('click', () => {
+                note.classList.add('fade-out');
+                setTimeout(() => {
+                    note.remove();
+                    reappearNote();  // 音符を再び生成
+                }, 1000);
+            });
+
+            document.body.appendChild(note);
+        }
+
+        // 音符がクリックされて消えた後に再生成
+        function reappearNote() {
+            const note = document.createElement('div');
+            const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
+            note.className = 'music-note';
+            note.style.top = `${Math.random() * 80 + 10}vh`;
+            note.style.left = `${Math.random() * 80 + 10}vw`;
+            note.style.fontSize = `${20 + Math.random() * 30}px`;
+            note.style.opacity = 0.2;
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+
+            note.addEventListener('click', () => {
+                note.classList.add('fade-out');
+                setTimeout(() => {
+                    note.remove();
+                    reappearNote();  // 再生成
+                }, 1000);
+            });
+
+            document.body.appendChild(note);
+        }
+    });
+</script>
     <div id="app">
         <!-- ログイン画面 -->
         <div v-if="!loggedIn" id="login-container">
