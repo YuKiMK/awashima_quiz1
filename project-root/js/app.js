@@ -87,6 +87,16 @@ const app = Vue.createApp({
                 submitButton.style.cursor = 'not-allowed';
             }
         },
+        login() {
+            if (this.name && this.roomNumber) {
+                this.loggedIn = true;
+                this.loadLanguageData(this.selectedLanguage);  // クイズの質問をロードする
+                this.shuffleQuestions();  // 質問をシャッフルする
+                this.currentQuestionIndex = 0; // クイズを最初の質問からスタート
+            } else {
+                alert(this.texts.roomNumberPlaceholder);
+            }
+        },
         showResults() {
             this.quizCompleted = true;
         },
