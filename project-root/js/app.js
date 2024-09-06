@@ -87,6 +87,31 @@ const app = Vue.createApp({
                 submitButton.style.cursor = 'not-allowed';
             }
         },
+        
+        reappearNote() {
+            setTimeout(() => {
+                const note = document.createElement('div');
+                const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
+                note.className = 'music-note';
+                note.style.top = `${Math.random() * 80 + 10}vh`;
+                note.style.left = `${Math.random() * 80 + 10}vw`;
+                note.style.fontSize = `${20 + Math.random() * 30}px`;
+                note.style.opacity = 0;
+                note.textContent = notes[Math.floor(Math.random() * notes.length)];
+                document.body.appendChild(note);
+                setTimeout(() => {
+                    note.style.opacity = 0.2;
+                }, 100);
+                note.addEventListener('click', () => {
+                    note.classList.add('fade-out');
+                    setTimeout(() => {
+                        note.remove();
+                        this.reappearNote();
+                    }, 1000);
+                });
+            }, 3000);
+        },
+        
         showResults() {
             this.quizCompleted = true;
         },
