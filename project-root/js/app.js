@@ -184,24 +184,6 @@ const app = Vue.createApp({
                     document.body.appendChild(note);
                 }
             });
-                    // 音符がクリックされて消えた後に再生成
-        function reappearNote() {
-            const note = document.createElement('div');
-            const notes = ['♪', '♫', '♬', '♩', '♭', '♮'];
-            note.className = 'music-note';
-            note.style.top = `${Math.random() * 80 + 10}vh`;
-            note.style.left = `${Math.random() * 80 + 10}vw`;
-            note.style.fontSize = `${20 + Math.random() * 30}px`;
-            note.style.opacity = 0.2;
-            note.textContent = notes[Math.floor(Math.random() * notes.length)];
-
-            note.addEventListener('click', () => {
-                note.classList.add('fade-out');
-                setTimeout(() => {
-                    note.remove();
-                    reappearNote();  // 再生成
-                }, 1000);
-            });
 
             document.body.appendChild(note);
             }
