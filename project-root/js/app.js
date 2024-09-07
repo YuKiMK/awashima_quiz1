@@ -75,9 +75,9 @@ const app = Vue.createApp({
             this.answered = true;
             this.answers[this.currentQuestionIndex] = this.currentAnswer;
 
-            // 正解のチェックを修正
+        // Correct answer is compared directly to 'correct' field of the current question
             const currentQuestion = this.limitedQuestions[this.currentQuestionIndex];
-            if (this.currentAnswer === currentQuestion.options[currentQuestion.originalIndex]) {
+            if (this.currentAnswer === currentQuestion.correct) {
                 this.score++;
             }
 
@@ -99,8 +99,12 @@ const app = Vue.createApp({
                 this.currentAnswer = '';
                 this.answered = false;
                 this.checkAnswerSelected();
+            } else {
+                // If all questions are answered, show the results
+                this.showResults();
             }
         },
+        
         showResults() {
             this.quizCompleted = true;
         },
